@@ -1,0 +1,73 @@
+xonaru1d v0.8
+========
+
+Copyright (C) 2014  Atanas Georgiev
+
+Based on the reverse engineering work of Alessandro Pignotti
+https://github.com/alexp-sssup/asus-xonar-u1-utils
+
+
+This program is part of the 'xonaru1service' project.
+See https://github.com/atanas-t-georgiev/xonaru1service for more information.
+
+'xonaru1d' provides communication interface to Xonar U1 thru socket.
+It is used by 'xonaru1service' to communicate with the device.
+
+
+REQUIREMENTS:
+
+- Linux Kernel with support for HIDRAW
+- Recent version of gcc
+- make
+
+The program is tested on Debian 7.3 
+
+BUILD INSTRUCTIONS:
+
+- cd to the directory where 'Makefile' is
+- type 'make'
+
+USAGE:
+
+The program is meant to be run as a system service with 'root' privileges.
+
+Usage: xonaru1d [ipc_port] [hiddev_prefix] [dev_from] [dev_to]
+
+[ipc_port] - The TCP port on which 
+'xonaru1d' will listen for connections from 'xonaru1service'.
+
+[hiddev_prefix] - Usually '/dev/hidraw' 
+
+If [dev_from] is N and [dev_to] is M, 
+the program will search for Xonar U1 device from hiddev_prefixN to hiddev_prefixM.
+
+Example: xonaru1d 17777 /dev/hidraw 0 5
+
+In this configuration the program will listen for connections on 'localhost:17777'
+and will check all devices from /dev/hidraw0 to /dev/hidraw5.
+
+The device may or may not be connected when 'xonaru1d' is started.
+It will be discovered once it's connected.
+If it gets unplugged and then plugged again, Linux may assign it a new number.
+Again, it will be discovered, as long as the new number is between [dev_from] and [dev_to].
+
+For [ipc_port] You can choose random port number,
+it doesn't matter as long as it's not already bind.
+
+For [hiddev_prefix], just put /dev/hidraw
+
+For [dev_from], 0 is always a good value.
+
+For [dev_to], the number of your USB ports will be sufficient.
+Note that many laptops have various integrated devices attached to USB.
+So if you have 4 ports on the outside, you may actually have 6 ports in total.
+
+---------------------------------------------------
+
+THIS PROGRAM IS A CLEAN-ROOM IMPLEMENTATION 
+AND IS NOT OFFICIAL SOFTWARE FROM THE MANUFACTURER.
+
+THE CHANCE OF THIS PROGRAM DAMAGING YOUR HARDWARE CANNOT BE EXCLUDED.
+USE AT YOUR OWN RISK.
+
+---------------------------------------------------
